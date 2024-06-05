@@ -1,18 +1,20 @@
-// JavaScript for Opening and Closing the Modal
-var modal = document.getElementById("playlist-modal");
-var span = document.getElementsByClassName("close")[0];
+let modalOpened = false;
+let currModal;
 
-function openModal() {
-  modal.style.display = "block";
+function openModal(playlistModalID) {
+   currModal = document.getElementById(playlistModalID);
+   currModal.style.display = "block";
+   modalOpened = true;
 }
 
-// span.onclick = function () {
-//   modal.style.display = "none";
-// };
+function closeModal() {
+   currModal.style.display = "none";
+   modalOpened = false;
+}
 
 window.onclick = function (event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
+  if (event.target == currModal) {
+    currModal.style.display = "none";
   }
 };
 
@@ -26,10 +28,9 @@ function loadPlaylistCards() {
     let playlistCreator = data.playlists[i]["playlist_creator"];
     let playlistArt = data.playlists[i]["playlist_art"];
     let playlistLikeCount = data.playlists[i]["likeCount"];
-    console.log(playlistLikeCount);
 
     let playlistCard = `
-         <div class="playlist-cards text">
+         <div class="playlist-cards text" onclick="openModal('playlist-${playlistID}-modal')">
             <div class="playlist-cards-stats">
                <img src="${playlistArt}">
                <h3>${playlistName}</h3>
@@ -47,11 +48,7 @@ function loadPlaylistCards() {
     rowCount++;
 
     if (rowCount == 4) {
-      playcardHtml += `
-            <div class="playlist-row">
-            ${currentRow}
-            </div>
-            `;
+      playcardHtml += `<div class="playlist-row">${currentRow}</div>`;
       rowCount = 0;
       currentRow = "";
     }
@@ -60,31 +57,88 @@ function loadPlaylistCards() {
   // add empty cards to make sure all cards are aligned the same
   if (rowCount != 0) {
     while (rowCount < 4) {
-      currentRow += `
-            <div class="playlist-cards text" style="visibility: hidden;">
-               <img src="assets/img/playlist.png">
-               <h3>Playlist Title</h3>
-               <p>Creator Name</p>
-               
-               <div class="playlist-cards-like text">
-                  <img src="assets/img/heart.png">
-                  <p>0</p>
-               </div>
-            </div>
-            `;
+      currentRow += `<div class="playlist-cards text" style="visibility: hidden;"></div>`;
       rowCount++;
     }
-    playcardHtml += `
-         <div class="playlist-row">
-            ${currentRow}
-         </div>
-         `;
-    rowCount = 0;
-    currentRow = "";
+    playcardHtml += `<div class="playlist-row">${currentRow}</div>`;
   }
 
+  document.getElementById("playlist-cards-container").innerHTML = playcardHtml;
+}
 
-  document.getElementById("main-container").innerHTML = playcardHtml;
+/*
+<div id="playlist-modal" class="modal">
+   <div class="modal-content">
+      <div id="playlist">
+
+         <div id="playlist-header">
+               <img src="assets/img/playlist.png">
+               <div class="text">
+                  <h1>Playlist Title</h1>
+                  <p>Creator Name</p>
+               </div>
+         </div>
+      </div>
+
+   <span class="close">&times;</span>
+</div>
+*/
+
+function loadPlaylistModals() {
+  let playlistModalsHtml = "";
+  for (let i = 0; i < data.playlists.length; i++) {
+    // process songs
+    let songsHtml = "";
+    for (let j = 0; j < data.playlists[i].songs.length; j++) {
+      let songID = data.playlists[i].songs[j]["songID"];
+      let songTitle = data.playlists[i].songs[j]["title"];
+      let songArtist = data.playlists[i].songs[j]["artist"];
+      let songAlbum = data.playlists[i].songs[j]["album"];
+      let songArt = data.playlists[i].songs[j]["cover_art"];
+      let songDuration = data.playlists[i].songs[j]["duration"];
+
+      let song = `
+         <div class="playlist-song" id="song-${songID}">
+            <img src="${songArt}">
+            <div class="text">
+                  <p>${songTitle}</p>
+                  <p>${songArtist}</p>
+                  <p>${songAlbum}</p>
+            </div>
+            <div class="playlist-song-playtime text">${songDuration}</div>
+         </div>
+         `;
+      songsHtml += song;
+    }
+
+    let playlistID = data.playlists[i]["playlistID"];
+    let playlistName = data.playlists[i]["playlist_name"];
+    let playlistCreator = data.playlists[i]["playlist_creator"];
+    let playlistArt = data.playlists[i]["playlist_art"];
+
+    let currModal = `
+      <div id='playlist-${playlistID}-modal' class="modal">
+         <div class="modal-content">
+            <div id="playlist">
+               <div id="playlist-header">
+                  <img src="${playlistArt}">
+                  <div class="text">
+                     <h1>${playlistName}</h1>
+                     <h3>${playlistCreator}</h3>
+                  </div>
+               </div>
+               ${songsHtml}
+            </div>
+            <span class="close" onclick="closeModal()">&times;</span>
+         </div>
+      </div>
+      `;
+
+    playlistModalsHtml += currModal;
+  }
+
+  document.getElementById("playlist-modals-container").innerHTML = playlistModalsHtml;
 }
 
 loadPlaylistCards();
+loadPlaylistModals();

@@ -141,11 +141,11 @@ footer {
 #playlist-header {
     display: flex;
     height: 20vh;
+    margin: 1% 0;
 }
 
 #playlist-header .text {
     margin: 0 1.5%;
-    text-wrap: nowrap;
 }
 
 /* Individual songs */
@@ -155,7 +155,7 @@ footer {
     border: 2px solid gray;
     margin: 0.5% 0;
     padding: 0.5%;
-    height: 10vh;
+    height: 8vh;
 }
 
 .playlist-song .text:first-of-type {
