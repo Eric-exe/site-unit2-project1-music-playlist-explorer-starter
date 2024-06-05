@@ -24,26 +24,32 @@ main {
 footer {
     background-color: lightgray;
     border: 1px solid gray;
-    min-height: 2%;
+    min-height: 4%;
     position: fixed;
     bottom: 0;
     width: 100%;
 }
 
-/* Playlist cards */
+/*General text color*/
+.text {
+    font-size: 15px;
+    color: rgb(87, 87, 87);
+}
 
+/* Playlist cards */
 .playlist-row {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-evenly;
 }
 
 .playlist-cards {
     display: flex;
     flex-direction: column;
     border: 2px solid gray;
-    padding: 10px;
+    padding: 0.5%;
     border-radius: 10px;
-    width: 16%;
+    box-shadow: 4px 4px;
+    width: 15%;
     margin: 1%;
 }
 
@@ -61,7 +67,7 @@ footer {
 
 .playlist-cards-like img {
     width: 15%;
-    margin-right: 2%;
+    margin-right: 5%;
 }
 
 .playlist-cards-like p {
@@ -83,10 +89,13 @@ footer {
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
  }
  .modal-content {
+    display: flex;
+    justify-content: center;
     background-color: #fefefe;
-    margin: 15% auto; /* 15% from the top and centered */
+    margin: 15vh auto; /* 15% from the top and centered */
     padding: 20px;
     border: 1px solid #888;
+    border-radius: 10px;
     width: 80%; /* Could be more or less, depending on screen size */
  }
  .close {
@@ -103,3 +112,36 @@ footer {
  }
 
  /* Modal content */
+#playlist {
+    width: 90%;
+}
+
+/* Header */
+#playlist-header {
+    display: flex;
+    height: 20vh;
+}
+
+#playlist-header .text {
+    margin: 0 1.5%;
+}
+
+/* Individual songs */
+.playlist-song {
+    display: flex;
+    justify-content: space-between;
+    border: 2px solid gray;
+    margin: 1% 0;
+    padding: 0.5%;
+    height: 10vh;
+}
+
+.playlist-song .text:first-of-type {
+    margin: auto auto auto 1%;
+    font-size: 12px;
+    width: 10%;
+}
+
+.playlist-song-playtime {
+    margin: auto 3%;
+}
