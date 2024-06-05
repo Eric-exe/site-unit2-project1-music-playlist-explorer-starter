@@ -2,6 +2,11 @@ let modalOpened = false;
 let currModal;
 
 function openModal(playlistModalID) {
+   // check if like is pressed
+   let playlistID = playlistModalID.split('-')[1];
+   let likeIcon = document.getElementById(`playlist-${playlistID}-like`);
+   if (likeIcon.matches(":hover")) return;
+   
    currModal = document.getElementById(playlistModalID);
    currModal.style.display = "block";
    modalOpened = true;
@@ -18,10 +23,23 @@ window.onclick = function (event) {
   }
 };
 
+function likePressed(likeIconID) {
+   // Update whether or not the like button is pressed
+   let playlistID = likeIconID.split('-')[1];
+   let likeIcon = document.getElementById(likeIconID);
+   let likeCnt = document.getElementById(`playlist-${playlistID}-like-cnt`);
+   if (likeIcon.classList.contains("like-icon-clicked")) {
+      likeIcon.classList.remove("like-icon-clicked");
+      likeCnt.textContent = parseInt(likeCnt.textContent) - 1;
+   }
+   else {
+      likeIcon.classList.add("like-icon-clicked");
+      likeCnt.textContent = parseInt(likeCnt.textContent) + 1;
+   }
+}
+
 function loadPlaylistCards() {
   let playcardHtml = "";
-  let currentRow = "";
-  let rowCount = 0;
   for (let i = 0; i < data.playlists.length; i++) {
     let playlistID = data.playlists[i]["playlistID"];
     let playlistName = data.playlists[i]["playlist_name"];
@@ -38,51 +56,18 @@ function loadPlaylistCards() {
             </div>
             
             <div class="playlist-cards-like text">
-               <img src="assets/img/heart.png">
-               <p>${playlistLikeCount}</p>
+               <svg class="like-icon" id="playlist-${playlistID}-like" onclick="likePressed('playlist-${playlistID}-like')" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
+                  <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+               </svg>&nbsp;
+               <p id="playlist-${playlistID}-like-cnt">${playlistLikeCount}</p>
             </div>
          </div>
          `;
 
-    currentRow += playlistCard;
-    rowCount++;
-
-    if (rowCount == 4) {
-      playcardHtml += `<div class="playlist-row">${currentRow}</div>`;
-      rowCount = 0;
-      currentRow = "";
-    }
+    playcardHtml += playlistCard;
   }
-
-  // add empty cards to make sure all cards are aligned the same
-  if (rowCount != 0) {
-    while (rowCount < 4) {
-      currentRow += `<div class="playlist-cards text" style="visibility: hidden;"></div>`;
-      rowCount++;
-    }
-    playcardHtml += `<div class="playlist-row">${currentRow}</div>`;
-  }
-
   document.getElementById("playlist-cards-container").innerHTML = playcardHtml;
 }
-
-/*
-<div id="playlist-modal" class="modal">
-   <div class="modal-content">
-      <div id="playlist">
-
-         <div id="playlist-header">
-               <img src="assets/img/playlist.png">
-               <div class="text">
-                  <h1>Playlist Title</h1>
-                  <p>Creator Name</p>
-               </div>
-         </div>
-      </div>
-
-   <span class="close">&times;</span>
-</div>
-*/
 
 function loadPlaylistModals() {
   let playlistModalsHtml = "";
@@ -101,9 +86,9 @@ function loadPlaylistModals() {
          <div class="playlist-song" id="song-${songID}">
             <img src="${songArt}">
             <div class="text">
-                  <p>${songTitle}</p>
-                  <p>${songArtist}</p>
-                  <p>${songAlbum}</p>
+                  ${songTitle}</br>
+                  ${songArtist}</br>
+                  ${songAlbum}
             </div>
             <div class="playlist-song-playtime text">${songDuration}</div>
          </div>
@@ -127,7 +112,8 @@ function loadPlaylistModals() {
                      <h3>${playlistCreator}</h3>
                   </div>
                </div>
-               ${songsHtml}
+
+               <div class="playlist-songs">${songsHtml}</div>
             </div>
             <span class="close" onclick="closeModal()">&times;</span>
          </div>

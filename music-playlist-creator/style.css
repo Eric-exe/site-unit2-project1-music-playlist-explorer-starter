@@ -34,10 +34,9 @@ footer {
     color: #212529;
 }
 
-/* Playlist cards */
-.playlist-row {
-    display: flex;
-    justify-content: space-evenly;
+#playlist-cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr) ); ;
 }
 
 .playlist-cards {
@@ -45,12 +44,12 @@ footer {
     flex-direction: column;
     justify-content: space-between;
     border: 5px solid darkgray;
-    padding: 0.5%;
+    padding: 2%;
     background-color: #f8f9fa;
     border-radius: 10px;
     box-shadow: 4px 4px;
-    width: 13%;
-    margin: 1%;
+    width: 75%;
+    margin: 5%;
     transition: border 0.5s;
     transition: background-color 0.5s;
 }
@@ -81,10 +80,16 @@ footer {
     margin-top: 3%;
 }
 
-.playlist-cards-like img {
-    width: 10%;
-    margin-right: 5%;
-    border: 0px;
+.like-icon:hover {
+    fill: #ffc107;
+}
+
+.like-icon {
+    fill: gray;
+}
+
+.like-icon-clicked {
+    fill: #198754;
 }
 
 .playlist-cards-like p {
