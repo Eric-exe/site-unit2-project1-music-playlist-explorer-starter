@@ -8,7 +8,7 @@ let data = { "playlists": [
       "songs": [
         {
           "songID": 0,
-          "title": "Nightcall",
+           "title": "Nightcall",
           "artist": "Kavinsky",
           "album": "Nightcall",
           "cover_art": "https://picsum.photos/id/43/200",
