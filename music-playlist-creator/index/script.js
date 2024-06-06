@@ -2,7 +2,6 @@ let PLAYLIST_CARDS_CONTAINER = "playlist-cards-container";
 let PLAYLIST_MODALS_CONTAINER = "playlist-modals-container";
 
 // ####################################################################################################################################################################################################
-
 /*
 IDS: 
 Cards: playlist-[playlistID]-card
@@ -12,7 +11,6 @@ Likes: playlist-[playlistID]-like-cnt
 Playlist: playlist-[playlistID]-playlist
 Shuffle: playlist-[playlistID]-shuffle
 */
-
 // ####################################################################################################################################################################################################
 // functions to populate the website with the info
 let playlistsInfo = {}
@@ -111,7 +109,7 @@ function populateSongs(playlistID) {
          <div class="playlist-song" id="song-${song["songID"]}">
             <img src="${song["cover_art"]}">
             <div class="text">
-                  ${song["title"]}</br>
+                  <b>${song["title"]}</b>
                   ${song["artist"]}</br>
                   ${song["album"]}
             </div>
@@ -196,7 +194,10 @@ function shufflePlaylist(playlistID) {
 }
 
 // ####################################################################################################################################################################################################
+// index.html init
 loadData();
 populatePlaylistCards();
 populatePlaylistModals();
 generateEventListeners();
+
+// ####################################################################################################################################################################################################
