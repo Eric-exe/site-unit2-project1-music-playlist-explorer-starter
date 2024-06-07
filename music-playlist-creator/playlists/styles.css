@@ -32,12 +32,12 @@ footer {
 .text {
     font-size: 1rem;
     color: #212529;
-    font-family: Verdana;
+    font-family: "Tiny5", Verdana;
 }
 
 #playlist-cards-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(20vw, 250px), 1fr)); ;
+    grid-template-columns: repeat(auto-fit, minmax(15vw, 0.2fr)) ;
 }
 
 .playlist-cards {
@@ -78,7 +78,6 @@ footer {
 .playlist-cards-like {
     display: flex;
     width: 100%;
-    padding-right: 5%;
     text-align: center;
     margin-top: 3%;
 }
@@ -86,17 +85,30 @@ footer {
 
 .like-icon {
     fill: gray;
-    transition: fill 0.25s;
+    transition: fill 0.25s, transform 0.25s;
 }
 
 .like-icon:hover {
     fill: #ffc107;
     cursor: pointer;
+    transform: scale(1.1);
 }
 
 .like-icon-clicked {
     fill: #dc3545;
 }
+
+.trash-icon {
+    fill: gray;
+    transition: fill 0.25s, transform 0.25s;
+}
+
+.trash-icon:hover {
+    fill: black;
+    cursor: pointer;
+    transform: scale(1.1);
+}
+
 
 .playlist-cards-like p {
     text-align: center;
@@ -190,7 +202,7 @@ footer {
 }
 
 /* shuffle */
-.shuffle-button {
+.button {
     background-color: #198754;
     padding: 1vh 4vw;
     border-radius: 20px;
@@ -200,13 +212,26 @@ footer {
     transition: all 0.1s;
 }
 
-.shuffle-button:hover {
+.button:hover {
     background-color: #105a38;
     transform: scale(1.05, 1.05);
     cursor: pointer;
 }
 
+
+/* formatting */
 .right-align {
     display: flex;
     flex-direction: row-reverse;
+}
+
+.apart {
+    display: flex;
+    width: 95%;
+    justify-content: space-between;
+}
+
+#featured-button {
+    height: 50%;
+    margin: auto 0;
 }

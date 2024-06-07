@@ -14,6 +14,7 @@ let ID_MAP = {
    "likeIcon": "playlist-ID-like-icon",
    "song":     "song-ID",
    "close":    "close-ID",
+   "trash":    "trash-ID",
 };
 
 // ####################################################################################################################################################################################################
@@ -35,7 +36,7 @@ function populatePlaylistsInfo() {
    }
 }
 
-function populatePlaylistCards() {
+function populatePlaylistCards(parentID) {
    let template = document.getElementById(PLAYLIST_CARDS_TEMPLATE);
 
    for (const [playlistID, stats] of Object.entries(playlistsInfo)) {
@@ -44,25 +45,28 @@ function populatePlaylistCards() {
       let playlistCardID     = `playlist-${playlistID}-card`;
       let playlistLikeIconID = `playlist-${playlistID}-like-icon`;
       let playlistLikeCntID  = `playlist-${playlistID}-like-cnt`;
+      let trashID            = `trash-${playlistID}`;
 
       let playlistCardDOM     = playlistCard.getElementById(ID_MAP["card"]);
       let playlistLikeIconDOM = playlistCard.getElementById(ID_MAP["likeIcon"]);
       let playlistLikeCntDOM  = playlistCard.getElementById(ID_MAP["likeCnt"]);
+      let trashDOM            = playlistCard.getElementById(ID_MAP["trash"]);
 
       playlistCardDOM.id     = playlistCardID;
       playlistLikeIconDOM.id = playlistLikeIconID;
       playlistLikeCntDOM.id  = playlistLikeCntID;
+      trashDOM.id            = trashID;
 
       playlistCardDOM.querySelector("img").src        = stats["playlist_art"];
       playlistCardDOM.querySelector("h3").textContent = stats["playlist_name"];
       playlistCardDOM.querySelector("p").textContent  = stats["playlist_creator"];
       playlistLikeCntDOM.textContent                  = stats["likeCount"];
 
-      document.getElementById(PLAYLIST_CARDS_CONTAINER).appendChild(playlistCard);
+      document.getElementById(parentID).appendChild(playlistCard);
    }
 }
 
-function populatePlaylistModals() {
+function populatePlaylistModals(parentID) {
    let template = document.getElementById(PLAYLIST_MODALS_TEMPLATE);
 
    for (const [playlistID, stats] of Object.entries(playlistsInfo)) {
@@ -87,7 +91,7 @@ function populatePlaylistModals() {
       playlistModalDOM.querySelector("h1").textContent = stats["playlist_name"];
       playlistModalDOM.querySelector("h3").textContent = stats["playlist_creator"];
 
-      document.getElementById(PLAYLIST_MODALS_CONTAINER).appendChild(playlistModal);
+      document.getElementById(parentID).appendChild(playlistModal);
       populateSongs(playlistID, playlistPlaylistID);
    }
 }
@@ -125,10 +129,10 @@ function populateSongs(playlistID, parentID) {
 function openModal(playlistID) {
    // check if like is pressed
    let likeIcon = document.getElementById(`playlist-${playlistID}-like-icon`);
-   if (likeIcon.matches(":hover")) return;
+   if (likeIcon != null && likeIcon.matches(":hover")) return;
    
    currModal = document.getElementById(`playlist-${playlistID}-modal`);
-   currModal.style.display = "block";
+   if (currModal != null) currModal.style.display = "block";
 }
 
 // handle the closing of modals
@@ -154,6 +158,11 @@ function populateEventListeners() {
          "click",
          () => { shufflePlaylist(playlistID); }
       );
+
+      document.getElementById(`trash-${playlistID}`).addEventListener(
+         "click",
+         () => { deletePlaylist(playlistID); }
+      )
 
    }
 }
@@ -198,9 +207,15 @@ function shufflePlaylist(playlistID) {
    populateSongs(playlistID, `playlist-${playlistID}-playlist`);
 }
 
+// delete playlist
+function deletePlaylist(playlistID) {
+   document.getElementById(PLAYLIST_CARDS_CONTAINER).removeChild(document.getElementById(`playlist-${playlistID}-card`));
+   document.getElementById(PLAYLIST_MODALS_CONTAINER).removeChild(document.getElementById(`playlist-${playlistID}-modal`));
+}
+
 // ####################################################################################################################################################################################################
 populatePlaylistsInfo();
-populatePlaylistCards();
-populatePlaylistModals();
+populatePlaylistCards(PLAYLIST_CARDS_CONTAINER);
+populatePlaylistModals(PLAYLIST_MODALS_CONTAINER);
 populateEventListeners();
 

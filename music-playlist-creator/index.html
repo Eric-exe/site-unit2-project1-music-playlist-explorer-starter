@@ -8,14 +8,24 @@
     <title>Featured Playlist</title>
     <link rel="icon" type="image/x-icon" href="../assets/img/favicon.ico">
 
-    <link rel="stylesheet" href="../index/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tiny5&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="playlists/styles.css">
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
     <header>
         <!-- Your header content here -->
-        <h1>Featured Playlist</h1>
+        <div class="apart">
+            <h1 class="text" style="color: white; font-size: 2rem;">Featured Playlist</h1>
+            <a href="/music-playlist-creator/playlists/playlists.html" id="featured-button" class="button text">
+                <div style="margin: auto; font-size: 1.25rem;">
+                    PLAYLISTS
+                </div>
+            </a>
+        </div>
     </header>
 
     <main>
@@ -38,8 +48,8 @@
             <img src="IMG_SRC">
         </div>
         <div id="playlist-info">
-            <h1 class="text" style="font-size: 1.15rem; margin-left: 3%;">PLAYLIST_NAME</h1>
-            <h3 class="text" style="margin-left: 3%;">PLAYLIST_AUTHOR</h3>
+            <h1 class="text" style="font-size: 2rem; margin-left: 3%;">PLAYLIST_NAME</h1>
+            <h3 class="text" style="font-size: 1.5rem; margin-left: 3%;">PLAYLIST_AUTHOR</h3>
         </div>
     </template>
 
@@ -48,7 +58,7 @@
         <div class="playlist-song" id="song-ID">
             <img src="COVER_ART">
             <div class="text">
-                <b>SONG_TITLE</b>
+                <b style="font-size: 1.15rem">SONG_TITLE</b>
                 <div class="song-stat" style="font-size: small;">
                     <div class="artist-name">ARTIST_NAME</div>
                     <div class="album-name">ALBUM_NAME</div>
@@ -59,7 +69,7 @@
     </template>
 
 
-    <script src="../data/data.js"></script>
+    <script src="/music-playlist-creator/data/data.js"></script>
     <script src="script.js"></script>
 </body>
 
