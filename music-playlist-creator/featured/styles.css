@@ -3,6 +3,7 @@ header {
     display: flex;
     color: white;
     padding-left: 2%;
+    width: 100%;
 }
 
 body {
@@ -30,14 +31,15 @@ footer {
 
 #featured-left-container {
     margin-right: 3%;
+    border: 4px double #198754;
 }
 
-#featured-song-container {
+#featured-playlist-container {
     display: flex;
     padding: 1%;
 }
 
-#featured-song-container .text {
+#featured-playlist-container .text {
     color: white;
 }
 
@@ -48,4 +50,9 @@ footer {
 
 #featured-right-container {
     width: 90%;
+    height: 100%;
+}
+
+.playlist-song:hover {
+    background-color: #313131;
 }
