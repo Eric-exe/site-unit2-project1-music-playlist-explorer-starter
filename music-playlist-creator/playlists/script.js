@@ -5,6 +5,8 @@ let PLAYLIST_CARDS_TEMPLATE   = "playlist-cards-template";
 let PLAYLIST_MODALS_TEMPLATE  = "playlist-modals-template";
 let PLAYLIST_SONGS_TEMPLATE   = "playlist-songs-template";
 
+let SEARCH_PLAYLIST_ID        = "search-playlist";
+
 let ID_MAP = {
    "card":     "playlist-ID-card",
    "modal":    "playlist-ID-modal",
@@ -192,6 +194,9 @@ function shufflePlaylist(playlistID) {
 function deletePlaylist(playlistID) {
    document.getElementById(PLAYLIST_CARDS_CONTAINER).removeChild(document.getElementById(`playlist-${playlistID}-card`));
    document.getElementById(PLAYLIST_MODALS_CONTAINER).removeChild(document.getElementById(`playlist-${playlistID}-modal`));
+
+   // remove from data (this prevents it from showing up when searching)
+   delete playlistsInfo[playlistID];
 }
 
 // handle the closing of modals
@@ -204,7 +209,30 @@ window.onclick = function (event) {
   }
 };
 
+function filterPlaylists() {
+   let cardsID  = PLAYLIST_CARDS_CONTAINER;
+   let modalsID = PLAYLIST_MODALS_CONTAINER;
+
+   let root = document.getElementById(SEARCH_PLAYLIST_ID).value.toUpperCase();
+   let rootLength = root.length;
+   
+   // clear cards and modals
+   document.getElementById(cardsID).innerHTML = "";
+   document.getElementById(modalsID).innerHTML = "";
+
+   for (const [playlistID, stats] of Object.entries(playlistsInfo)) {
+      let playlistRoot = stats["playlist_name"].substr(0, rootLength).toUpperCase();
+      let creatorRoot  = stats["playlist_creator"].substr(0, rootLength).toUpperCase();
+      if (root != playlistRoot && root != creatorRoot) continue;
+      populatePlaylistCard(playlistID, cardsID);
+      populatePlaylistModal(playlistID, modalsID);
+      populateEventListeners(playlistID);
+   }
+}
+
 // ####################################################################################################################################################################################################
+// necessary functions to populate website
+
 populatePlaylistsInfo();
 
 for (const [playlistID, _] of Object.entries(playlistsInfo)) {
@@ -212,4 +240,3 @@ for (const [playlistID, _] of Object.entries(playlistsInfo)) {
    populatePlaylistModal(playlistID, PLAYLIST_MODALS_CONTAINER);
    populateEventListeners(playlistID);
 }
-

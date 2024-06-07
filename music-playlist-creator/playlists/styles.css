@@ -235,3 +235,17 @@ footer {
     height: 50%;
     margin: auto 0;
 }
+
+#search-playlist {
+    width: 100%;
+    transform: scale(1.5);
+    border-radius: 10px;
+    font-family: "Tiny5", Helvetica;
+    background-color: #495057;
+    color: white;
+    padding: 2px 5px;
+}
+
+#search-playlist::placeholder {
+    color: #e9ecef;
+}
