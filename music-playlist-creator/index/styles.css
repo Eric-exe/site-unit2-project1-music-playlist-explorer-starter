@@ -32,8 +32,7 @@ footer {
 .text {
     font-size: 1rem;
     color: #212529;
-    font-family: Helvetica;
-    overflow: auto;
+    font-family: Verdana;
 }
 
 #playlist-cards-container {
@@ -156,7 +155,7 @@ footer {
 }
 
 #playlist-header .text {
-    margin: 0 1.5%;
+    margin: auto 1.5%;
 }
 
 /* Individual songs */
@@ -166,7 +165,7 @@ footer {
     border: 2px solid gray;
     margin: 0.5% 0;
     padding: 0.5%;
-    height: 8vh;
+    height: 10vh;
     transition: all 0.1s
 }
 
@@ -180,6 +179,7 @@ footer {
     flex-direction: column;
     margin: auto auto auto 1%;
     text-wrap: nowrap;
+    overflow: clip;
 }
 
 .playlist-song-playtime {
@@ -201,6 +201,7 @@ footer {
     background-color: #105a38;
     transform: scale(1.05, 1.05);
 }
+
 .right-align {
     display: flex;
     flex-direction: row-reverse;
