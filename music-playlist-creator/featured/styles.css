@@ -1,0 +1,50 @@
+header {
+    background-color: #198754;
+    display: flex;
+    color: white;
+    padding-left: 2%;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #212529;
+    height: 100vh;
+}
+
+main {
+    padding: 1%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+footer {
+    background-color: #198754;
+    min-height: 3%;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+#featured-left {
+    margin-right: 2%;
+}
+
+#featured-song-container .text {
+    color: white;
+}
+
+#featured-song-container {
+    display: flex;
+}
+
+#playlist-img {
+    display: flex;
+    height: 60vh;
+}
+
+#featured-right {
+    width: 90%;
+}

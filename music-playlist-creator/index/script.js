@@ -1,16 +1,21 @@
-let PLAYLIST_CARDS_CONTAINER = "playlist-cards-container";
+let PLAYLIST_CARDS_CONTAINER  = "playlist-cards-container";
 let PLAYLIST_MODALS_CONTAINER = "playlist-modals-container";
 
-// ####################################################################################################################################################################################################
-/*
-IDS: 
-Cards: playlist-[playlistID]-card
-Modals: playlist-[playlistID]-modal
-Like Icon: playlist-[playlistID]-like-icon
-Likes: playlist-[playlistID]-like-cnt
-Playlist: playlist-[playlistID]-playlist
-Shuffle: playlist-[playlistID]-shuffle
-*/
+let PLAYLIST_CARDS_TEMPLATE   = "playlist-cards-template";
+let PLAYLIST_MODALS_TEMPLATE  = "playlist-modals-template";
+let PLAYLIST_SONGS_TEMPLATE   = "playlist-songs-template";
+
+let ID_MAP = {
+   "card":     "playlist-ID-card",
+   "modal":    "playlist-ID-modal",
+   "likeCnt":  "playlist-ID-like-cnt",
+   "shuffle":  "playlist-ID-shuffle",
+   "playlist": "playlist-ID-playlist",
+   "likeIcon": "playlist-ID-like-icon",
+   "song":     "song-ID",
+   "close":    "close-ID",
+};
+
 // ####################################################################################################################################################################################################
 // functions to populate the website with the info
 let playlistsInfo = {}
@@ -19,108 +24,98 @@ let playlistsInfo = {}
 function loadData() {
    for (let i = 0; i < data["playlists"].length; i++) {
       let playlist = data["playlists"][i];
-      let playlistID = playlist["playlistID"];
-      let playlistName = playlist["playlist_name"];
-      let playlistCreator = playlist["playlist_creator"];
-      let playlistArt = playlist["playlist_art"];
-      let likeCount = playlist["likeCount"];
 
-      let songsArray = playlist["songs"];
-      playlistsInfo[playlistID] = {
-         "playlist_name": playlistName,
-         "playlist_art": playlistArt,
-         "playlist_creator": playlistCreator,
-         "likeCount": likeCount,
-         "songs": songsArray
+      playlistsInfo[playlist["playlistID"]] = {
+         "playlist_name":    playlist["playlist_name"],
+         "playlist_art":     playlist["playlist_art"],
+         "playlist_creator": playlist["playlist_creator"],
+         "likeCount":        playlist["likeCount"],
+         "songs":            playlist["songs"],
       };
    }
 }
 
-// generates the HTML that populates PLAYLIST_CARDS_CONTAINER
 function populatePlaylistCards() {
-   let playlistCardsHTML = "";
-   for (let [playlistID, stats] of Object.entries(playlistsInfo)) {
-      let singlePlaylistCard = `
-         <div class="playlist-cards text" id="playlist-${playlistID}-card">
-            <div class="playlist-cards-stats">
-               <img src="${stats["playlist_art"]}">
-               <h3>${stats["playlist_name"]}</h3>
-               <p>${stats["playlist_creator"]}</p>
-            </div>
-            
-            <div class="playlist-cards-like text">
-               <svg class="like-icon" id="playlist-${playlistID}-like-icon" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
-                  <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
-               </svg>&nbsp;
-               <p id="playlist-${playlistID}-like-cnt">${stats["likeCount"]}</p>
-            </div>
-         </div>
-         `;
-      playlistCardsHTML += singlePlaylistCard;
+   let template = document.getElementById(PLAYLIST_CARDS_TEMPLATE);
+
+   for (const [playlistID, stats] of Object.entries(playlistsInfo)) {
+      let playlistCard = template.content.cloneNode(true);
+
+      let playlistCardID     = `playlist-${playlistID}-card`;
+      let playlistLikeIconID = `playlist-${playlistID}-like-icon`;
+      let playlistLikeCntID  = `playlist-${playlistID}-like-cnt`;
+
+      let playlistCardDOM     = playlistCard.getElementById(ID_MAP["card"]);
+      let playlistLikeIconDOM = playlistCard.getElementById(ID_MAP["likeIcon"]);
+      let playlistLikeCntDOM  = playlistCard.getElementById(ID_MAP["likeCnt"]);
+
+      playlistCardDOM.id     = playlistCardID;
+      playlistLikeIconDOM.id = playlistLikeIconID;
+      playlistLikeCntDOM.id  = playlistLikeCntID;
+
+      playlistCardDOM.querySelector("img").src        = stats["playlist_art"];
+      playlistCardDOM.querySelector("h3").textContent = stats["playlist_name"];
+      playlistCardDOM.querySelector("p").textContent  = stats["playlist_creator"];
+      playlistLikeCntDOM.textContent                  = stats["likeCount"];
+
+      document.getElementById(PLAYLIST_CARDS_CONTAINER).appendChild(playlistCard);
    }
-   document.getElementById(PLAYLIST_CARDS_CONTAINER).innerHTML = playlistCardsHTML;
 }
 
-// generate the HTML that populates modals in PLAYLIST_MODALS_CONTAINER
 function populatePlaylistModals() {
-   let playlistModalsHTML = "";
-   for (let [playlistID, stats] of Object.entries(playlistsInfo)) {
-      let singleModal = `
-      <div id='playlist-${playlistID}-modal' class="modal">
-         <div class="modal-content">
-            <div id="playlist">
-               <div id="playlist-header">
-                  <img src="${stats["playlist_art"]}" style="border: 5px double darkgray">
-                  <div class="text" style="max-height: 20vh; overflow: clip;">
-                     <h1>${stats["playlist_name"]}</h1>
-                     <h3>${stats["playlist_creator"]}</h3>
-                  </div>
-               </div>
-               <div class="right-align">
-                  <div id="playlist-${playlistID}-shuffle" class="shuffle-button">
-                     <p style="margin: auto 0;">Shuffle &nbsp;</p>
-                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-shuffle" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M0 3.5A.5.5 0 0 1 .5 3H1c2.202 0 3.827 1.24 4.874 2.418.49.552.865 1.102 1.126 1.532.26-.43.636-.98 1.126-1.532C9.173 4.24 10.798 3 13 3v1c-1.798 0-3.173 1.01-4.126 2.082A9.6 9.6 0 0 0 7.556 8a9.6 9.6 0 0 0 1.317 1.918C9.828 10.99 11.204 12 13 12v1c-2.202 0-3.827-1.24-4.874-2.418A10.6 10.6 0 0 1 7 9.05c-.26.43-.636.98-1.126 1.532C4.827 11.76 3.202 13 1 13H.5a.5.5 0 0 1 0-1H1c1.798 0 3.173-1.01 4.126-2.082A9.6 9.6 0 0 0 6.444 8a9.6 9.6 0 0 0-1.317-1.918C4.172 5.01 2.796 4 1 4H.5a.5.5 0 0 1-.5-.5"/>
-                        <path d="M13 5.466V1.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384l-2.36 1.966a.25.25 0 0 1-.41-.192m0 9v-3.932a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384l-2.36 1.966a.25.25 0 0 1-.41-.192"/>
-                     </svg>
-                  </div>
-               </div>
+   let template = document.getElementById(PLAYLIST_MODALS_TEMPLATE);
 
-               <div class="playlist-songs" id="playlist-${playlistID}-playlist">
-                  ${populateSongs(playlistID)}
-               </div>
-            </div>
-            <div>
-               <span class="modal-close" id="close-${playlistID}">&times;</span>
-            </div>
-         </div>
-      </div>
-      `;
-      playlistModalsHTML += singleModal;
+   for (const [playlistID, stats] of Object.entries(playlistsInfo)) {
+      let playlistModal = template.content.cloneNode(true);
+
+      let playlistModalID     = `playlist-${playlistID}-modal`;
+      let playlistShuffleID   = `playlist-${playlistID}-shuffle`;
+      let playlistPlaylistID  = `playlist-${playlistID}-playlist`;
+      let playlistCloseID     = `close-${playlistID}`;
+
+      let playlistModalDOM     = playlistModal.getElementById(ID_MAP["modal"]);
+      let playlistShuffleDOM   = playlistModal.getElementById(ID_MAP["shuffle"]);
+      let playlistPlaylistDOM  = playlistModal.getElementById(ID_MAP["playlist"]);
+      let playlistCloseDOM     = playlistModal.getElementById(ID_MAP["close"]);
+
+      playlistModalDOM.id    = playlistModalID;
+      playlistShuffleDOM.id  = playlistShuffleID;
+      playlistPlaylistDOM.id = playlistPlaylistID;
+      playlistCloseDOM.id    = playlistCloseID;
+
+      playlistModalDOM.querySelector("img").src        = stats["playlist_art"];
+      playlistModalDOM.querySelector("h1").textContent = stats["playlist_name"];
+      playlistModalDOM.querySelector("h3").textContent = stats["playlist_creator"];
+
+      document.getElementById(PLAYLIST_MODALS_CONTAINER).appendChild(playlistModal);
+      populateSongs(playlistID);
    }
-   document.getElementById(PLAYLIST_MODALS_CONTAINER).innerHTML = playlistModalsHTML;
 }
 
-// generates the HTML that populates the songs inside modals
+// generate the HTML that populates songs in PLAYLIST_MODALS_CONTAINER
 function populateSongs(playlistID) {
-   let songsHTML = "";
-   for (let song of playlistsInfo[playlistID]["songs"]) {
-      let singleSong = `
-         <div class="playlist-song" id="song-${song["songID"]}">
-            <img src="${song["cover_art"]}">
-            <div class="text">
-                  <b>${song["title"]}</b>
-                  <div style="font-size: small;">
-                     ${song["artist"]}</br>
-                     ${song["album"]}
-                  </div>
-            </div>
-            <div class="playlist-song-playtime text">${song["duration"]}</div>
-         </div>
-      `;
-      songsHTML += singleSong;
+   // clear the playlist (for shuffle button)
+   document.getElementById(`playlist-${playlistID}-playlist`).innerHTML = "";
+
+   let template = document.getElementById(PLAYLIST_SONGS_TEMPLATE);
+
+   for (const song of playlistsInfo[playlistID]["songs"]) {
+      let songCard = template.content.cloneNode(true);
+
+      let songID = `song-${song["songID"]}`;
+
+      let songCardDOM = songCard.getElementById(ID_MAP["song"]);
+
+      songCardDOM.id = songID;
+
+      songCardDOM.querySelector("img").src                             = song["cover_art"];
+      songCardDOM.querySelector("b").textContent                       = song["title"];
+      songCardDOM.querySelector(".artist-name").textContent            = song["artist"];
+      songCardDOM.querySelector(".album-name").textContent             = song["album"];
+      songCardDOM.querySelector(".playlist-song-playtime").textContent = song["duration"];
+
+      document.getElementById(`playlist-${playlistID}-playlist`).appendChild(songCardDOM);
    }
-   return songsHTML;
 }
 
 // ####################################################################################################################################################################################################
@@ -141,27 +136,33 @@ function closeModal(playlistID) {
    document.getElementById(`playlist-${playlistID}-modal`).style.display = "none";
 }
 
-// event listeners to show modal/  update likes when card is pressed
+// event listeners to show modal / update likes when card is pressed
 function generateEventListeners() {
    for (let [playlistID, _] of Object.entries(playlistsInfo)) {
+      
       document.getElementById(`playlist-${playlistID}-card`).addEventListener(
          "click",
          () => { openModal(playlistID); }
       );
+
       document.getElementById(`playlist-${playlistID}-like-icon`).addEventListener(
          "click",
          () => { likePressed(playlistID); }
       );
+
       document.getElementById(`playlist-${playlistID}-shuffle`).addEventListener(
          "click",
          () => { shufflePlaylist(playlistID); }
       );
+
    }
 }
 
 // handle the closing of modals
 window.onclick = function (event) {
-  if (event.target.classList.contains("modal") || event.target.classList.contains("modal-close")) {
+   // if the user clicks outside of the modal or the close button, close the modal
+  if (event.target.classList.contains("modal") || 
+      event.target.classList.contains("modal-close")) {
       let playlistID = event.target.id.split('-')[1];
       closeModal(playlistID);
   }
@@ -172,7 +173,9 @@ window.onclick = function (event) {
 function likePressed(playlistID) {
    // Update whether or not the like button is pressed
    let likeIcon = document.getElementById(`playlist-${playlistID}-like-icon`);
-   let likeCnt = document.getElementById(`playlist-${playlistID}-like-cnt`);
+   let likeCnt  = document.getElementById(`playlist-${playlistID}-like-cnt`);
+
+   // update like/unlike
    if (likeIcon.classList.contains("like-icon-clicked")) {
       likeIcon.classList.remove("like-icon-clicked");
       likeCnt.textContent = parseInt(likeCnt.textContent) - 1;
@@ -192,7 +195,7 @@ function shufflePlaylist(playlistID) {
       playlistsInfo[playlistID]["songs"][i] = playlistsInfo[playlistID]["songs"][newIdx];
       playlistsInfo[playlistID]["songs"][newIdx] = tmp;
    }
-   document.getElementById(`playlist-${playlistID}-playlist`).innerHTML = populateSongs(playlistID);
+   populateSongs(playlistID);
 }
 
 // ####################################################################################################################################################################################################
