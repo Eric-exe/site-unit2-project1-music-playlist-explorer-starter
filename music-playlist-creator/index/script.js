@@ -21,7 +21,7 @@ let ID_MAP = {
 let playlistsInfo = {}
 
 // Loads data from data.js
-function loadData() {
+function populatePlaylistsInfo() {
    for (let i = 0; i < data["playlists"].length; i++) {
       let playlist = data["playlists"][i];
 
@@ -88,14 +88,14 @@ function populatePlaylistModals() {
       playlistModalDOM.querySelector("h3").textContent = stats["playlist_creator"];
 
       document.getElementById(PLAYLIST_MODALS_CONTAINER).appendChild(playlistModal);
-      populateSongs(playlistID);
+      populateSongs(playlistID, playlistPlaylistID);
    }
 }
 
 // generate the HTML that populates songs in PLAYLIST_MODALS_CONTAINER
-function populateSongs(playlistID) {
+function populateSongs(playlistID, parentID) {
    // clear the playlist (for shuffle button)
-   document.getElementById(`playlist-${playlistID}-playlist`).innerHTML = "";
+   document.getElementById(parentID).innerHTML = "";
 
    let template = document.getElementById(PLAYLIST_SONGS_TEMPLATE);
 
@@ -114,7 +114,7 @@ function populateSongs(playlistID) {
       songCardDOM.querySelector(".album-name").textContent             = song["album"];
       songCardDOM.querySelector(".playlist-song-playtime").textContent = song["duration"];
 
-      document.getElementById(`playlist-${playlistID}-playlist`).appendChild(songCardDOM);
+      document.getElementById(parentID).appendChild(songCardDOM);
    }
 }
 
@@ -137,7 +137,7 @@ function closeModal(playlistID) {
 }
 
 // event listeners to show modal / update likes when card is pressed
-function generateEventListeners() {
+function populateEventListeners() {
    for (let [playlistID, _] of Object.entries(playlistsInfo)) {
       
       document.getElementById(`playlist-${playlistID}-card`).addEventListener(
@@ -195,14 +195,12 @@ function shufflePlaylist(playlistID) {
       playlistsInfo[playlistID]["songs"][i] = playlistsInfo[playlistID]["songs"][newIdx];
       playlistsInfo[playlistID]["songs"][newIdx] = tmp;
    }
-   populateSongs(playlistID);
+   populateSongs(playlistID, `playlist-${playlistID}-playlist`);
 }
 
 // ####################################################################################################################################################################################################
-// index.html init
-loadData();
+populatePlaylistsInfo();
 populatePlaylistCards();
 populatePlaylistModals();
-generateEventListeners();
+populateEventListeners();
 
-// ####################################################################################################################################################################################################

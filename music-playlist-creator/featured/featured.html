@@ -20,20 +20,10 @@
 
     <main>
         <div id="featured-song-container">
-            <span id="featured-left">
-                <div id="playlist-img">
-                    <img src="../assets/img/playlist.png">
-                </div>
-                <div id="playlist-info">
-                    <h1 class="text" style="font-size: 2rem;">Playlist Name</h1>
-                    <h3 class="text">Playlist Author</h3>
-                </div>
+            <span id="featured-left-container">
             </span>
 
-            <span id="featured-right">
-                <div id="songs">
-                    HELo
-                </div>
+            <span id="featured-right-container">
             </span>
         </div>
     </main>
@@ -42,8 +32,35 @@
         <!-- Your footer content here -->
     </footer>
 
+    <!-- Templates -->
+    <!---------------------------------------------------------------------------------------------->
+    <template id="featured-left-template">
+        <div id="playlist-img">
+            <img src="IMG_SRC">
+        </div>
+        <div id="playlist-info">
+            <h1 class="text" style="font-size: 1.15rem;">PLAYLIST_NAME</h1>
+            <h3 class="text">PLAYLIST_AUTHOR</h3>
+        </div>
+    </template>
+
+    <!---------------------------------------------------------------------------------------------->
+    <template id="playlist-songs-template">
+        <div class="playlist-song" id="song-ID">
+            <img src="COVER_ART">
+            <div class="text">
+                <b>SONG_TITLE</b>
+                <div class="song-stat" style="font-size: small;">
+                    <div class="artist-name">ARTIST_NAME</div>
+                    <div class="album-name">ALBUM_NAME</div>
+                </div>
+            </div>
+            <div class="playlist-song-playtime text">SONG_DURATION</div>
+        </div>
+    </template>
+
+
     <script src="../data/data.js"></script>
-    <script src="../index/script.js"></script>
     <script src="script.js"></script>
 </body>
 

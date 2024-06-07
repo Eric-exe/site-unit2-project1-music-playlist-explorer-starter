@@ -28,16 +28,17 @@ footer {
     width: 100%;
 }
 
-#featured-left {
-    margin-right: 2%;
-}
-
-#featured-song-container .text {
-    color: white;
+#featured-left-container {
+    margin-right: 3%;
 }
 
 #featured-song-container {
     display: flex;
+    padding: 1%;
+}
+
+#featured-song-container .text {
+    color: white;
 }
 
 #playlist-img {
@@ -45,6 +46,6 @@ footer {
     height: 60vh;
 }
 
-#featured-right {
+#featured-right-container {
     width: 90%;
 }
