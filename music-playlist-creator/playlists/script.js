@@ -36,64 +36,60 @@ function populatePlaylistsInfo() {
    }
 }
 
-function populatePlaylistCards(parentID) {
+function populatePlaylistCard(playlistID, parentID) {
    let template = document.getElementById(PLAYLIST_CARDS_TEMPLATE);
+   let playlistCard = template.content.cloneNode(true);
+   let stats = playlistsInfo[playlistID];
 
-   for (const [playlistID, stats] of Object.entries(playlistsInfo)) {
-      let playlistCard = template.content.cloneNode(true);
+   let playlistCardID     = `playlist-${playlistID}-card`;
+   let playlistLikeIconID = `playlist-${playlistID}-like-icon`;
+   let playlistLikeCntID  = `playlist-${playlistID}-like-cnt`;
+   let trashID            = `trash-${playlistID}`;
 
-      let playlistCardID     = `playlist-${playlistID}-card`;
-      let playlistLikeIconID = `playlist-${playlistID}-like-icon`;
-      let playlistLikeCntID  = `playlist-${playlistID}-like-cnt`;
-      let trashID            = `trash-${playlistID}`;
+   let playlistCardDOM     = playlistCard.getElementById(ID_MAP["card"]);
+   let playlistLikeIconDOM = playlistCard.getElementById(ID_MAP["likeIcon"]);
+   let playlistLikeCntDOM  = playlistCard.getElementById(ID_MAP["likeCnt"]);
+   let trashDOM            = playlistCard.getElementById(ID_MAP["trash"]);
 
-      let playlistCardDOM     = playlistCard.getElementById(ID_MAP["card"]);
-      let playlistLikeIconDOM = playlistCard.getElementById(ID_MAP["likeIcon"]);
-      let playlistLikeCntDOM  = playlistCard.getElementById(ID_MAP["likeCnt"]);
-      let trashDOM            = playlistCard.getElementById(ID_MAP["trash"]);
+   playlistCardDOM.id     = playlistCardID;
+   playlistLikeIconDOM.id = playlistLikeIconID;
+   playlistLikeCntDOM.id  = playlistLikeCntID;
+   trashDOM.id            = trashID;
 
-      playlistCardDOM.id     = playlistCardID;
-      playlistLikeIconDOM.id = playlistLikeIconID;
-      playlistLikeCntDOM.id  = playlistLikeCntID;
-      trashDOM.id            = trashID;
+   playlistCardDOM.querySelector("img").src        = stats["playlist_art"];
+   playlistCardDOM.querySelector("h3").textContent = stats["playlist_name"];
+   playlistCardDOM.querySelector("p").textContent  = stats["playlist_creator"];
+   playlistLikeCntDOM.textContent                  = stats["likeCount"];
 
-      playlistCardDOM.querySelector("img").src        = stats["playlist_art"];
-      playlistCardDOM.querySelector("h3").textContent = stats["playlist_name"];
-      playlistCardDOM.querySelector("p").textContent  = stats["playlist_creator"];
-      playlistLikeCntDOM.textContent                  = stats["likeCount"];
-
-      document.getElementById(parentID).appendChild(playlistCard);
-   }
+   document.getElementById(parentID).appendChild(playlistCard);
 }
 
-function populatePlaylistModals(parentID) {
+function populatePlaylistModal(playlistID, parentID) {
    let template = document.getElementById(PLAYLIST_MODALS_TEMPLATE);
+   let playlistModal = template.content.cloneNode(true);
+   let stats = playlistsInfo[playlistID];
 
-   for (const [playlistID, stats] of Object.entries(playlistsInfo)) {
-      let playlistModal = template.content.cloneNode(true);
+   let playlistModalID     = `playlist-${playlistID}-modal`;
+   let playlistShuffleID   = `playlist-${playlistID}-shuffle`;
+   let playlistPlaylistID  = `playlist-${playlistID}-playlist`;
+   let playlistCloseID     = `close-${playlistID}`;
 
-      let playlistModalID     = `playlist-${playlistID}-modal`;
-      let playlistShuffleID   = `playlist-${playlistID}-shuffle`;
-      let playlistPlaylistID  = `playlist-${playlistID}-playlist`;
-      let playlistCloseID     = `close-${playlistID}`;
+   let playlistModalDOM     = playlistModal.getElementById(ID_MAP["modal"]);
+   let playlistShuffleDOM   = playlistModal.getElementById(ID_MAP["shuffle"]);
+   let playlistPlaylistDOM  = playlistModal.getElementById(ID_MAP["playlist"]);
+   let playlistCloseDOM     = playlistModal.getElementById(ID_MAP["close"]);
 
-      let playlistModalDOM     = playlistModal.getElementById(ID_MAP["modal"]);
-      let playlistShuffleDOM   = playlistModal.getElementById(ID_MAP["shuffle"]);
-      let playlistPlaylistDOM  = playlistModal.getElementById(ID_MAP["playlist"]);
-      let playlistCloseDOM     = playlistModal.getElementById(ID_MAP["close"]);
+   playlistModalDOM.id    = playlistModalID;
+   playlistShuffleDOM.id  = playlistShuffleID;
+   playlistPlaylistDOM.id = playlistPlaylistID;
+   playlistCloseDOM.id    = playlistCloseID;
 
-      playlistModalDOM.id    = playlistModalID;
-      playlistShuffleDOM.id  = playlistShuffleID;
-      playlistPlaylistDOM.id = playlistPlaylistID;
-      playlistCloseDOM.id    = playlistCloseID;
+   playlistModalDOM.querySelector("img").src        = stats["playlist_art"];
+   playlistModalDOM.querySelector("h1").textContent = stats["playlist_name"];
+   playlistModalDOM.querySelector("h3").textContent = stats["playlist_creator"];
 
-      playlistModalDOM.querySelector("img").src        = stats["playlist_art"];
-      playlistModalDOM.querySelector("h1").textContent = stats["playlist_name"];
-      playlistModalDOM.querySelector("h3").textContent = stats["playlist_creator"];
-
-      document.getElementById(parentID).appendChild(playlistModal);
-      populateSongs(playlistID, playlistPlaylistID);
-   }
+   document.getElementById(parentID).appendChild(playlistModal);
+   populateSongs(playlistID, playlistPlaylistID);
 }
 
 // generate the HTML that populates songs in PLAYLIST_MODALS_CONTAINER
@@ -141,42 +137,27 @@ function closeModal(playlistID) {
 }
 
 // event listeners to show modal / update likes when card is pressed
-function populateEventListeners() {
-   for (let [playlistID, _] of Object.entries(playlistsInfo)) {
-      
-      document.getElementById(`playlist-${playlistID}-card`).addEventListener(
-         "click",
-         () => { openModal(playlistID); }
-      );
+function populateEventListeners(playlistID) {
+   document.getElementById(`playlist-${playlistID}-card`).addEventListener(
+      "click",
+      () => { openModal(playlistID); }
+   );
 
-      document.getElementById(`playlist-${playlistID}-like-icon`).addEventListener(
-         "click",
-         () => { likePressed(playlistID); }
-      );
+   document.getElementById(`playlist-${playlistID}-like-icon`).addEventListener(
+      "click",
+      () => { likePressed(playlistID); }
+   );
 
-      document.getElementById(`playlist-${playlistID}-shuffle`).addEventListener(
-         "click",
-         () => { shufflePlaylist(playlistID); }
-      );
+   document.getElementById(`playlist-${playlistID}-shuffle`).addEventListener(
+      "click",
+      () => { shufflePlaylist(playlistID); }
+   );
 
-      document.getElementById(`trash-${playlistID}`).addEventListener(
-         "click",
-         () => { deletePlaylist(playlistID); }
-      )
-
-   }
+   document.getElementById(`trash-${playlistID}`).addEventListener(
+      "click",
+      () => { deletePlaylist(playlistID); }
+   )
 }
-
-// handle the closing of modals
-window.onclick = function (event) {
-   // if the user clicks outside of the modal or the close button, close the modal
-  if (event.target.classList.contains("modal") || 
-      event.target.classList.contains("modal-close")) {
-      let playlistID = event.target.id.split('-')[1];
-      closeModal(playlistID);
-  }
-};
-
 
 // handle if like is pressed
 function likePressed(playlistID) {
@@ -213,9 +194,22 @@ function deletePlaylist(playlistID) {
    document.getElementById(PLAYLIST_MODALS_CONTAINER).removeChild(document.getElementById(`playlist-${playlistID}-modal`));
 }
 
+// handle the closing of modals
+window.onclick = function (event) {
+   // if the user clicks outside of the modal or the close button, close the modal
+  if (event.target.classList.contains("modal") || 
+      event.target.classList.contains("modal-close")) {
+      let playlistID = event.target.id.split('-')[1];
+      closeModal(playlistID);
+  }
+};
+
 // ####################################################################################################################################################################################################
 populatePlaylistsInfo();
-populatePlaylistCards(PLAYLIST_CARDS_CONTAINER);
-populatePlaylistModals(PLAYLIST_MODALS_CONTAINER);
-populateEventListeners();
+
+for (const [playlistID, _] of Object.entries(playlistsInfo)) {
+   populatePlaylistCard(playlistID, PLAYLIST_CARDS_CONTAINER);
+   populatePlaylistModal(playlistID, PLAYLIST_MODALS_CONTAINER);
+   populateEventListeners(playlistID);
+}
 
