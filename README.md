@@ -50,7 +50,7 @@ Deployed Application (optional): N/A
 
 ### Walkthrough Video
 
-<source src="video.mp4" type="video/mp4" max-width="300px"/>
+https://github.com/Eric-exe/site-unit2-project1-music-playlist-explorer-starter/assets/93724436/cd52f715-d905-4bd7-910c-9ac96ef66e13
 
 ### Reflection
 
