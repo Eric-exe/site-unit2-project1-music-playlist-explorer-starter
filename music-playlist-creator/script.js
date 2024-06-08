@@ -1,4 +1,4 @@
-let FEATURED_LEFT_CONTAINER = "featured-left-container";
+let FEATURED_LEFT_CONTAINER  = "featured-left-container";
 let FEATURED_RIGHT_CONTAINER = "featured-right-container";
 
 let FEATURED_LEFT_TEMPLATE  = "featured-left-template";
